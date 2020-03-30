@@ -18,6 +18,12 @@ description:
 extra-source-files:
   README.md
 
+flag library-only
+  default:
+    False
+  description:
+    Only build Miso as a library
+
 flag tests
   default:
     False
@@ -41,7 +47,7 @@ flag ios
 executable simple
   main-is:
     Main.hs
-  if !impl(ghcjs) && !flag(jsaddle)
+  if flag(library-only) || (!impl(ghcjs) && !flag(jsaddle))
     buildable: False
   else
     ghcjs-options:
@@ -72,7 +78,7 @@ executable simple
 executable tests
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(tests)
+  if flag(library-only) || !impl(ghcjs) || !flag(tests)
     buildable: False
   else
     ghcjs-options:
